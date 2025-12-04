@@ -428,9 +428,11 @@
     </div>
 
     <script>
-        // Configuration
+        // Configuration - Try backend directly if /api fails
         const API_BASE = '/api';
+        const BACKEND_DIRECT = 'http://54.76.91.230:5000'; // Fallback to direct backend
         let refreshInterval = null;
+        let useDirectBackend = false;
 
         // Initialize on page load
         window.addEventListener('load', () => {
@@ -493,7 +495,15 @@
         // Fetch system status
         async function fetchSystemStatus() {
             try {
-                const response = await fetch(`${API_BASE}/status`);
+                const url = useDirectBackend ? `${BACKEND_DIRECT}/status` : `${API_BASE}/status`;
+                const response = await fetch(url);
+                
+                if (!response.ok && !useDirectBackend) {
+                    console.log('API proxy failed, trying direct backend...');
+                    useDirectBackend = true;
+                    return fetchSystemStatus();
+                }
+                
                 const data = await response.json();
 
                 // Update NGINX status
@@ -526,7 +536,14 @@
         // Fetch containers
         async function fetchContainers() {
             try {
-                const response = await fetch(`${API_BASE}/containers`);
+                const url = useDirectBackend ? `${BACKEND_DIRECT}/containers` : `${API_BASE}/containers`;
+                const response = await fetch(url);
+                
+                if (!response.ok && !useDirectBackend) {
+                    useDirectBackend = true;
+                    return fetchContainers();
+                }
+                
                 const data = await response.json();
 
                 const tbody = document.getElementById('containers-table');
@@ -590,7 +607,14 @@
         // Fetch ports
         async function fetchPorts() {
             try {
-                const response = await fetch(`${API_BASE}/ports`);
+                const url = useDirectBackend ? `${BACKEND_DIRECT}/ports` : `${API_BASE}/ports`;
+                const response = await fetch(url);
+                
+                if (!response.ok && !useDirectBackend) {
+                    useDirectBackend = true;
+                    return fetchPorts();
+                }
+                
                 const data = await response.json();
 
                 const tbody = document.getElementById('ports-table');
