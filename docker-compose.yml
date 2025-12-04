@@ -1,6 +1,6 @@
 version: '3.8'
 
-# Custom network banao (containers aapas mein communicate karenge)
+# Custom network for container communication
 networks:
   devops-network:
     driver: bridge
@@ -8,7 +8,7 @@ networks:
       config:
         - subnet: 172.20.0.0/16
 
-# Persistent volumes (data save karne ke liye)
+# Persistent volumes
 volumes:
   mysql-data:
     driver: local
@@ -38,10 +38,12 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_password"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 40s
+    command: --default-authentication-plugin=mysql_native_password
 
   # ========================================
-  # Tier-2: Flask Backend (Distroless)
+  # Tier-2: Flask Backend
   # ========================================
   backend:
     build:
@@ -55,10 +57,11 @@ services:
       DB_PASSWORD: devops_pass
       DB_NAME: docker_tracker
       DB_PORT: 3306
+      PYTHONUNBUFFERED: 1
     ports:
       - "5000:5000"
     volumes:
-      # Docker socket mount karo (host ka Docker access backend ko chahiye)
+      # Mount Docker socket with write permissions
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       devops-network:
@@ -67,10 +70,13 @@ services:
       mysql:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "python3 -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:5000\")'"]
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
       interval: 15s
       timeout: 5s
-      retries: 3
+      retries: 5
+      start_period: 40s
+    # Must run as root for Docker socket access
+    privileged: true
 
   # ========================================
   # Tier-1: NGINX Frontend
@@ -87,9 +93,11 @@ services:
       devops-network:
         ipv4_address: 172.20.0.4
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80"]
       interval: 10s
       timeout: 5s
       retries: 3
+      start_period: 10s

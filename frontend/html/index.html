@@ -7,145 +7,375 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --bg-primary: #171717;
+            --bg-secondary: #1f1f1f;
+            --bg-card: #252525;
+            --border-color: #2c2c2c;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --accent-blue: #0d6efd;
+            --accent-success: #198754;
+            --accent-danger: #dc3545;
+            --accent-warning: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #171717;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #0d0d0d 100%);
+            color: var(--text-primary);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
         }
+
         .navbar {
-            background-color: #1f1f1f !important;
-            border-bottom: 2px solid #2c2c2c;
+            background: rgba(31, 31, 31, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar-brand i {
+            color: var(--accent-blue);
+            font-size: 2rem;
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0a58ca 100%);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(13, 110, 253, 0.5);
+        }
+
         .card {
-            background-color: #1f1f1f;
-            border: 1px solid #2c2c2c;
-            border-radius: 12px;
-            transition: transform 0.2s;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
         }
+
         .card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent-blue);
         }
-        .status-badge {
-            font-size: 0.9rem;
-            padding: 8px 16px;
+
+        .card-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.2rem 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .status-card {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .icon-box {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            font-size: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .icon-box::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 100%);
             border-radius: 20px;
         }
+
+        .icon-nginx {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        }
+
+        .icon-database {
+            background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+        }
+
+        .icon-containers {
+            background: linear-gradient(135deg, #0dcaf0 0%, #087990 100%);
+        }
+
+        .icon-ports {
+            background: linear-gradient(135deg, #ffc107 0%, #cc9a06 100%);
+        }
+
+        .status-badge {
+            font-size: 0.9rem;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .status-running {
-            background-color: #198754;
+            background: linear-gradient(135deg, var(--accent-success) 0%, #146c43 100%);
+            box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
         }
+
         .status-stopped {
-            background-color: #dc3545;
+            background: linear-gradient(135deg, var(--accent-danger) 0%, #b02a37 100%);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
         }
-        .status-warning {
-            background-color: #ffc107;
-            color: #000;
+
+        .status-unknown {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
         }
+
+        .count-display {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0dcaf0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .table {
-            color: #e0e0e0;
+            color: var(--text-primary);
+            margin-bottom: 0;
         }
-        .table-dark {
-            background-color: #1f1f1f;
+
+        .table thead {
+            background: var(--bg-secondary);
+            border-bottom: 2px solid var(--border-color);
         }
-        .table-dark thead {
-            background-color: #2c2c2c;
-        }
-        .btn-refresh {
-            background-color: #0d6efd;
+
+        .table thead th {
             border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
+            padding: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
         }
-        .btn-refresh:hover {
-            background-color: #0b5ed7;
+
+        .table tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s ease;
         }
-        .icon-box {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+
+        .table tbody tr:hover {
+            background: rgba(13, 110, 253, 0.1);
         }
-        .loading {
-            display: none;
+
+        .table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border: none;
         }
+
         .spinner-border {
             width: 1.5rem;
             height: 1.5rem;
+            margin-left: 8px;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .alert-custom {
+            border-radius: 12px;
+            border: none;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-info {
+            background: rgba(13, 202, 240, 0.1);
+            border-left: 4px solid #0dcaf0;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .error-state i {
+            font-size: 4rem;
+            color: var(--accent-danger);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+            
+            .icon-box {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+            
+            .count-display {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
     <!-- Navbar -->
-    <nav class="navbar navbar-dark">
+    <nav class="navbar navbar-dark sticky-top">
         <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">
-                <i class="fas fa-docker"></i> Docker Status Tracker
+            <span class="navbar-brand">
+                <i class="fab fa-docker"></i>
+                <span>Docker Status Tracker</span>
             </span>
-            <button class="btn btn-refresh" onclick="refreshData()">
-                <i class="fas fa-sync-alt"></i> Refresh
-                <span class="spinner-border loading ms-2" role="status"></span>
-            </button>
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-success" id="apiStatus">API Connected</span>
+                <button class="btn btn-refresh text-white" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
         </div>
     </nav>
 
     <div class="container mt-4">
+        <!-- Alert for connection issues -->
+        <div class="alert alert-custom alert-info d-none" id="connectionAlert">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Info:</strong> <span id="alertMessage"></span>
+        </div>
+
         <!-- System Status Cards -->
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="card text-center p-3">
-                    <div class="icon-box text-primary">
+        <div class="row g-4 mb-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="card status-card fade-in">
+                    <div class="icon-box icon-nginx">
                         <i class="fas fa-server"></i>
                     </div>
-                    <h6>NGINX Status</h6>
-                    <span id="nginx-status" class="status-badge status-running">Loading...</span>
+                    <h6 class="text-secondary mb-2">NGINX Status</h6>
+                    <span id="nginx-status" class="status-badge status-unknown">Checking...</span>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-center p-3">
-                    <div class="icon-box text-success">
+            <div class="col-md-3 col-sm-6">
+                <div class="card status-card fade-in">
+                    <div class="icon-box icon-database">
                         <i class="fas fa-database"></i>
                     </div>
-                    <h6>Database Status</h6>
-                    <span id="db-status" class="status-badge status-running">Loading...</span>
+                    <h6 class="text-secondary mb-2">Database Status</h6>
+                    <span id="db-status" class="status-badge status-unknown">Checking...</span>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-center p-3">
-                    <div class="icon-box text-info">
+            <div class="col-md-3 col-sm-6">
+                <div class="card status-card fade-in">
+                    <div class="icon-box icon-containers">
                         <i class="fab fa-docker"></i>
                     </div>
-                    <h6>Running Containers</h6>
-                    <h3 id="container-count" class="mt-2">-</h3>
+                    <h6 class="text-secondary mb-2">Running Containers</h6>
+                    <div class="count-display" id="container-count">-</div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="card text-center p-3">
-                    <div class="icon-box text-warning">
+            <div class="col-md-3 col-sm-6">
+                <div class="card status-card fade-in">
+                    <div class="icon-box icon-ports">
                         <i class="fas fa-network-wired"></i>
                     </div>
-                    <h6>Open Ports</h6>
-                    <h3 id="port-count" class="mt-2">-</h3>
+                    <h6 class="text-secondary mb-2">Open Ports</h6>
+                    <div class="count-display" id="port-count">-</div>
                 </div>
             </div>
         </div>
 
         <!-- Docker Containers Table -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5><i class="fab fa-docker"></i> Docker Containers</h5>
+        <div class="card mb-4 fade-in">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fab fa-docker me-2"></i> Docker Containers
+                </div>
+                <span class="badge bg-primary" id="totalContainers">0 Total</span>
             </div>
-            <div class="card-body">
+            <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-dark table-hover">
+                    <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th>Container Name</th>
-                                <th>Image</th>
-                                <th>Status</th>
-                                <th>Ports</th>
-                                <th>Created</th>
+                                <th><i class="fas fa-tag me-2"></i>Container Name</th>
+                                <th><i class="fas fa-image me-2"></i>Image</th>
+                                <th><i class="fas fa-heartbeat me-2"></i>Status</th>
+                                <th><i class="fas fa-plug me-2"></i>Ports</th>
+                                <th><i class="fas fa-calendar me-2"></i>Created</th>
                             </tr>
                         </thead>
                         <tbody id="containers-table">
                             <tr>
-                                <td colspan="5" class="text-center">Loading containers...</td>
+                                <td colspan="5" class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2 mb-0 text-secondary">Loading containers...</p>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -154,86 +384,146 @@
         </div>
 
         <!-- Port Mapping Table -->
-        <div class="card">
-            <div class="card-header">
-                <h5><i class="fas fa-plug"></i> Port Mapping & Availability</h5>
+        <div class="card fade-in">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-plug me-2"></i> Port Mapping & Availability
+                </div>
+                <span class="badge bg-success" id="openPorts">0 Open</span>
             </div>
-            <div class="card-body">
+            <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-dark table-hover">
+                    <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th>Port</th>
-                                <th>Service</th>
-                                <th>Status</th>
-                                <th>Protocol</th>
+                                <th><i class="fas fa-hashtag me-2"></i>Port</th>
+                                <th><i class="fas fa-cog me-2"></i>Service</th>
+                                <th><i class="fas fa-signal me-2"></i>Status</th>
+                                <th><i class="fas fa-network-wired me-2"></i>Protocol</th>
                             </tr>
                         </thead>
                         <tbody id="ports-table">
                             <tr>
-                                <td colspan="4" class="text-center">Loading port information...</td>
+                                <td colspan="4" class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2 mb-0 text-secondary">Loading port information...</p>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-5 mb-4">
+            <p class="text-secondary">
+                <i class="fas fa-heart text-danger"></i> Built with Docker, Flask & Bootstrap
+                <br>
+                <small>Auto-refresh every 15 seconds</small>
+            </p>
+        </div>
     </div>
 
     <script>
-        // API endpoint (NGINX reverse proxy se connect hoga)
+        // Configuration
         const API_BASE = '/api';
+        let refreshInterval = null;
 
-        // Page load hone par data fetch karo
+        // Initialize on page load
         window.addEventListener('load', () => {
+            console.log('🚀 Docker Status Tracker initialized');
             refreshData();
+            startAutoRefresh();
         });
+
+        // Start auto-refresh
+        function startAutoRefresh() {
+            if (refreshInterval) clearInterval(refreshInterval);
+            refreshInterval = setInterval(refreshData, 15000); // 15 seconds
+        }
 
         // Main refresh function
         async function refreshData() {
-            const spinner = document.querySelector('.spinner-border');
-            spinner.style.display = 'inline-block';
-
+            console.log('🔄 Refreshing data...');
+            
             try {
                 await Promise.all([
                     fetchSystemStatus(),
                     fetchContainers(),
                     fetchPorts()
                 ]);
+                
+                updateAPIStatus(true);
+                hideAlert();
             } catch (error) {
-                console.error('Error fetching data:', error);
-                alert('Failed to fetch data. Check backend connection.');
-            } finally {
-                spinner.style.display = 'none';
+                console.error('❌ Error fetching data:', error);
+                updateAPIStatus(false);
+                showAlert('Unable to connect to backend API. Please check if the Flask server is running.');
             }
         }
 
-        // System status fetch karo (NGINX, DB, etc.)
+        // Update API status indicator
+        function updateAPIStatus(connected) {
+            const badge = document.getElementById('apiStatus');
+            if (connected) {
+                badge.className = 'badge bg-success';
+                badge.textContent = 'API Connected';
+            } else {
+                badge.className = 'badge bg-danger';
+                badge.textContent = 'API Disconnected';
+            }
+        }
+
+        // Show alert
+        function showAlert(message) {
+            const alert = document.getElementById('connectionAlert');
+            const alertMessage = document.getElementById('alertMessage');
+            alertMessage.textContent = message;
+            alert.classList.remove('d-none');
+        }
+
+        // Hide alert
+        function hideAlert() {
+            document.getElementById('connectionAlert').classList.add('d-none');
+        }
+
+        // Fetch system status
         async function fetchSystemStatus() {
             try {
                 const response = await fetch(`${API_BASE}/status`);
                 const data = await response.json();
 
-                // NGINX status update karo
-                const nginxBadge = document.getElementById('nginx-status');
-                nginxBadge.textContent = data.nginx_status;
-                nginxBadge.className = data.nginx_status === 'Running' 
-                    ? 'status-badge status-running' 
-                    : 'status-badge status-stopped';
-
-                // Database status update karo
-                const dbBadge = document.getElementById('db-status');
-                dbBadge.textContent = data.db_status;
-                dbBadge.className = data.db_status === 'Connected' 
-                    ? 'status-badge status-running' 
-                    : 'status-badge status-stopped';
+                // Update NGINX status
+                updateStatusBadge('nginx-status', data.nginx_status);
+                
+                // Update Database status
+                updateStatusBadge('db-status', data.db_status);
 
             } catch (error) {
                 console.error('Error fetching system status:', error);
+                document.getElementById('nginx-status').textContent = 'Error';
+                document.getElementById('db-status').textContent = 'Error';
             }
         }
 
-        // Docker containers list fetch karo
+        // Update status badge
+        function updateStatusBadge(elementId, status) {
+            const badge = document.getElementById(elementId);
+            badge.textContent = status;
+            
+            if (status === 'Running' || status === 'Connected') {
+                badge.className = 'status-badge status-running';
+            } else if (status === 'Stopped' || status === 'Disconnected') {
+                badge.className = 'status-badge status-stopped';
+            } else {
+                badge.className = 'status-badge status-unknown';
+            }
+        }
+
+        // Fetch containers
         async function fetchContainers() {
             try {
                 const response = await fetch(`${API_BASE}/containers`);
@@ -242,22 +532,41 @@
                 const tbody = document.getElementById('containers-table');
                 tbody.innerHTML = '';
 
-                if (data.containers.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="5" class="text-center">No containers found</td></tr>';
+                if (!data.containers || data.containers.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                <div class="error-state">
+                                    <i class="fas fa-inbox"></i>
+                                    <p>No containers found</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
                     document.getElementById('container-count').textContent = '0';
+                    document.getElementById('totalContainers').textContent = '0 Total';
                     return;
                 }
 
-                document.getElementById('container-count').textContent = data.containers.length;
+                document.getElementById('container-count').textContent = data.running || data.total;
+                document.getElementById('totalContainers').textContent = `${data.total} Total`;
 
                 data.containers.forEach(container => {
+                    const statusClass = container.status === 'running' ? 'status-running' : 'status-stopped';
                     const row = `
                         <tr>
-                            <td><i class="fab fa-docker me-2"></i>${container.name}</td>
-                            <td>${container.image}</td>
-                            <td><span class="status-badge ${container.status === 'running' ? 'status-running' : 'status-stopped'}">${container.status}</span></td>
-                            <td>${container.ports || 'N/A'}</td>
-                            <td>${container.created}</td>
+                            <td>
+                                <i class="fab fa-docker me-2 text-primary"></i>
+                                <strong>${container.name}</strong>
+                            </td>
+                            <td><code>${container.image}</code></td>
+                            <td>
+                                <span class="status-badge ${statusClass}">
+                                    ${container.status}
+                                </span>
+                            </td>
+                            <td><small>${container.ports}</small></td>
+                            <td><small>${container.created}</small></td>
                         </tr>
                     `;
                     tbody.innerHTML += row;
@@ -265,10 +574,20 @@
 
             } catch (error) {
                 console.error('Error fetching containers:', error);
+                document.getElementById('containers-table').innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-4">
+                            <div class="error-state">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Failed to load containers</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
             }
         }
 
-        // Port information fetch karo
+        // Fetch ports
         async function fetchPorts() {
             try {
                 const response = await fetch(`${API_BASE}/ports`);
@@ -277,21 +596,41 @@
                 const tbody = document.getElementById('ports-table');
                 tbody.innerHTML = '';
 
-                if (data.ports.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No port information available</td></tr>';
+                if (!data.ports || data.ports.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="text-center py-4">
+                                <div class="error-state">
+                                    <i class="fas fa-inbox"></i>
+                                    <p>No port information available</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
                     document.getElementById('port-count').textContent = '0';
+                    document.getElementById('openPorts').textContent = '0 Open';
                     return;
                 }
 
-                document.getElementById('port-count').textContent = data.ports.length;
+                const openCount = data.open || data.ports.filter(p => p.status === 'Open').length;
+                document.getElementById('port-count').textContent = openCount;
+                document.getElementById('openPorts').textContent = `${openCount} Open`;
 
                 data.ports.forEach(port => {
+                    const statusClass = port.status === 'Open' ? 'status-running' : 'status-stopped';
+                    const iconClass = port.status === 'Open' ? 'fa-check-circle text-success' : 'fa-times-circle text-danger';
+                    
                     const row = `
                         <tr>
-                            <td><strong>${port.port}</strong></td>
+                            <td><strong class="text-primary">${port.port}</strong></td>
                             <td>${port.service}</td>
-                            <td><span class="status-badge ${port.status === 'Open' ? 'status-running' : 'status-stopped'}">${port.status}</span></td>
-                            <td>${port.protocol}</td>
+                            <td>
+                                <i class="fas ${iconClass} me-2"></i>
+                                <span class="status-badge ${statusClass}">
+                                    ${port.status}
+                                </span>
+                            </td>
+                            <td><code>${port.protocol}</code></td>
                         </tr>
                     `;
                     tbody.innerHTML += row;
@@ -299,11 +638,18 @@
 
             } catch (error) {
                 console.error('Error fetching ports:', error);
+                document.getElementById('ports-table').innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center py-4">
+                            <div class="error-state">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Failed to load port information</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
             }
         }
-
-        // Auto-refresh every 10 seconds
-        setInterval(refreshData, 10000);
     </script>
 </body>
 </html>
