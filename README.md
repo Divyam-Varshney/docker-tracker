@@ -160,8 +160,8 @@ Ensure these ports are available:
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/Divyam-Varshney/tier2-app.git
-cd tier2-app
+git clone https://github.com/Divyam-Varshney/docker-tracker.git
+cd docker-tracker
 ```
 
 ### Step 2: Start All Services
@@ -216,10 +216,10 @@ sudo usermod -aG docker $USER
 
 ```bash
 # Clone repository
-git clone https://github.com/Divyam-Varshney/tier2-app.git
+git clone https://github.com/Divyam-Varshney/docker-tracker.git
 
 # Navigate to project directory
-cd tier2-app
+cd docker-tracker
 
 # Verify project structure
 ls -la
@@ -288,7 +288,7 @@ curl http://localhost
 ## 📁 Project Structure
 
 ```
-tier2-app/
+docker-tracker/
 ├── 📂 frontend/                    # Tier-1: NGINX Frontend
 │   ├── 🐳 Dockerfile              # NGINX Alpine image config
 │   ├── ⚙️  nginx.conf             # Reverse proxy configuration
@@ -729,8 +729,8 @@ docker-compose --version
 
 ```bash
 # Clone repository
-git clone https://github.com/Divyam-Varshney/tier2-app.git
-cd tier2-app
+git clone https://github.com/Divyam-Varshney/docker-tracker.git
+cd docker-tracker
 
 # Fix Docker socket permissions
 sudo chmod 666 /var/run/docker.sock
@@ -761,7 +761,7 @@ sudo systemctl enable docker
 crontab -e
 
 # Add this line:
-@reboot cd /home/ubuntu/tier2-app && docker-compose up -d
+@reboot cd /home/ubuntu/docker-tracker && docker-compose up -d
 ```
 
 ---
@@ -867,8 +867,8 @@ copies of the Software...
 ## 📞 Support & Contact
 
 - **GitHub**: [@Divyam-Varshney](https://github.com/Divyam-Varshney)
-- **Project**: [tier2-app](https://github.com/Divyam-Varshney/tier2-app)
-- **Issues**: [Report Bug](https://github.com/Divyam-Varshney/tier2-app/issues)
+- **Project**: [docker-tracker](https://github.com/Divyam-Varshney/docker-tracker)
+- **Issues**: [Report Bug](https://github.com/Divyam-Varshney/docker-tracker/issues)
 
 ---
 
